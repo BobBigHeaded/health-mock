@@ -1,5 +1,7 @@
 export default async function Home() {
-  <div>
-    <p>Freaky</p>
-  </div>;
+  return (
+    <div>
+      <p>Freaky</p>
+    </div>
+  );
 }
