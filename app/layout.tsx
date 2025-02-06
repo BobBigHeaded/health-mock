@@ -17,7 +17,7 @@ export default function RootLayout({
         <div className="flex h-screen w-screen flex-col">
           <div className="bg-[#0A5F94] h-[100px] min-w-screen flex flex-row justify-between px-[80px]">
             <a href="/dashboard">
-              <img src="assets/home_button.png" />
+              <img src="assets/home_button.png"/>
             </a>
             <div className="flex flex-row justify-end text-[#FFFFFF] items-center font-[inter] text-[36px] gap-[250px]">
               <a href="/forecast">Forecast</a>
