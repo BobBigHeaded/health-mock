@@ -1,5 +1,5 @@
 import {createClient} from "@/utils/supabase/server";
-import getLocationData from "@/components/getLocationData";
+import GetLocationData from "@/components/getLocationData";
 import fetch from 'node-fetch';
 
 export default async function Dashboard() {
@@ -22,7 +22,7 @@ export default async function Dashboard() {
               <div className={"flex flex-col items-center gap-[10px]"}>
                   <input className={"h-[70px] w-[400px] text-2xl px-[20px] rounded-[40px] border-2 border-[#0A5F94]"} type={"text"} id={"placeName"} placeholder={"Enter a location"}/>
 
-                  <getLocationData></getLocationData>
+                  <GetLocationData/>
               </div>
 
               <div>
