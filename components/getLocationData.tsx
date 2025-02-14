@@ -1,19 +1,18 @@
-"use client"
 import React from "react";
+import {GeocodeResult, GeocodeResultSchema} from "@/components/GeocodeResultSchema";
+import {WeatherData, WeatherDataSchema} from "@/components/WeatherDataSchema";
 
-export default function GetLocationData() {
+const GOOGLEAPIS_KEY = "AIzaSyBVi1ZzmsMZb0M-w8mTg1i1yKpQGljO2dY"
+const OPENWEATHER_KEY = "ec4dcbe4ccbb42a565ba3c8863b8844a"
 
-    // return the geocoding info (lat and lon)
+export const fetchGeocodedLocationData = async (locationName: string) => {
+    const response  = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${locationName}&key=${GOOGLEAPIS_KEY}`);
+    const jsonBody = await response.json();
+    return GeocodeResultSchema.parse(jsonBody) as GeocodeResult;
+}
 
-    async function inputLocation(){
-        const response  = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${(document.getElementById("placeName") as HTMLInputElement).value}&key=AIzaSyBVi1ZzmsMZb0M-w8mTg1i1yKpQGljO2dY`, {})
-        const data = await response.json();
-        console.log(data.location);
-    }
-
-    return(
-        <button className={"border-2 border-[#0A5F94] rounded-[20px] h-[27px] w-[80px] bg-white hover:bg-[#ececec] transition-all"} onClick={inputLocation}>
-            <p className={"text-center"}>SUBMIT</p>
-        </button>
-    );
-};
+export const fetchWeatherData = async (lon : number, lat : number) => {
+    const reponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_KEY}`);
+    const jsonBody = await reponse.json();
+    return WeatherDataSchema.parse(jsonBody) as WeatherData;
+}
