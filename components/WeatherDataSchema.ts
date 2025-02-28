@@ -24,11 +24,6 @@ export const MainSchema = z.object({
 });
 export type Main = z.infer<typeof MainSchema>;
 
-export const RainSchema = z.object({
-    "1h": z.number(),
-});
-export type Rain = z.infer<typeof RainSchema>;
-
 export const SysSchema = z.object({
     "type": z.number(),
     "id": z.number(),
@@ -49,7 +44,6 @@ export type Weather = z.infer<typeof WeatherSchema>;
 export const WindSchema = z.object({
     "speed": z.number(),
     "deg": z.number(),
-    "gust": z.number(),
 });
 export type Wind = z.infer<typeof WindSchema>;
 
@@ -60,7 +54,6 @@ export const WeatherDataSchema = z.object({
     "main": MainSchema,
     "visibility": z.number(),
     "wind": WindSchema,
-    "rain": RainSchema,
     "clouds": CloudsSchema,
     "dt": z.number(),
     "sys": SysSchema,

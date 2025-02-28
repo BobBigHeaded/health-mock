@@ -1,7 +1,8 @@
 import {createClient} from "@/utils/supabase/server";
-import GetLocationData, {fetchGeocodedLocationData} from "@/components/getLocationData";
-import React from "react";
+import {fetchGeocodedLocationData, fetchWeatherData} from "@/components/getLocationData";
 import {GeocodeResult} from "@/components/GeocodeResultSchema";
+import {WeatherData} from "@/components/WeatherDataSchema";
+import React from "react";
 
 export default async function Dashboard(props: any) {
 
@@ -23,7 +24,7 @@ export default async function Dashboard(props: any) {
                     <form className={"flex flex-col items-center gap-[10px]"}>
                         <input
                             className={"h-[70px] w-[400px] text-2xl px-[20px] rounded-[40px] border-2 border-[#0A5F94]"}
-                            type={"text"} id={"placeName"} placeholder={"Enter a location"} name="placeName"/>
+                            type={"text"} id={"placeName"} placeholder={"Enter a location"} name="placeName" autoComplete={"off"}/>
 
                         <button
                             className={"border-2 border-[#0A5F94] rounded-[20px] h-[27px] w-[80px] bg-white hover:bg-[#ececec] transition-all"}
@@ -40,12 +41,7 @@ export default async function Dashboard(props: any) {
             </div>
 
             {/*right side of page*/}
-            <div className="flex-1 flex items-center justify-center flex-col">
-                <div className="bg-[#0A5F94] border-[4px] border-[#1186CF] h-[600px] w-[450px] rounded-[40px]">
-                    {/* generate all possible conditions */}
-
-                </div>
-            </div>
+            <EnvironmentalConditons placeData={placeData} />
         </div>
     );
 }
@@ -57,7 +53,31 @@ function Map(props : {placeData: GeocodeResult | null}) {
         return null;
     }return (
         <iframe className="border-2 border-[#0A5F94] rounded-[20px]" width="600" height="450"
-                      loading="lazy" allowFullScreen
+                      loading="lazy" id={"map"} allowFullScreen
                       src={`https://www.google.com/maps/embed/v1/place?q=place_id:${props.placeData.results.at(-1).place_id}&key=AIzaSyBVi1ZzmsMZb0M-w8mTg1i1yKpQGljO2dY`}></iframe>
+    )
+}
+
+async function EnvironmentalConditons(props : {placeData: GeocodeResult | null}) {
+    if (props.placeData == null) {
+        return null
+    }if (props.placeData.results.length == 0){
+        return null;
+    }
+
+    let weatherData: WeatherData | null = null;
+    weatherData = await fetchWeatherData(props.placeData.results.at(-1).geometry.location.lng, props.placeData.results.at(-1).geometry.location.lat);
+
+    const supabase = await createClient();
+    const {data: id} = await supabase.rpc('get_trigger_id', {temp: (weatherData.main.temp), hum: (weatherData.main.humidity), pol: 0});
+
+    return (
+        <div className="flex-1 flex items-center justify-center flex-col">
+            <div className="bg-[#0A5F94] border-[4px] border-[#1186CF] h-[600px] w-[450px] rounded-[40px]">
+                {/* generate all possible conditions */}
+                {/* create SQL to return actual data then use .map to create the list of items e.g. items.map() => {} */}
+                {}
+            </div>
+        </div>
     )
 }
